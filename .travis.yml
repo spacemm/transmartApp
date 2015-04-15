@@ -1,37 +1,36 @@
 language: groovy
-
 jdk:
-    - oraclejdk7
-
+- oraclejdk7
 before_install:
-    - mkdir -p ~/.m2
-    - bash -c '{ curl http://files.thehyve.net/caches/grails_2.3.5_mvncache.tar.gz  | tar -C ~/.m2 -xzf -; } || true'
-    - git clone --depth 1 git://github.com/thehyve/transmart-travis.git ~/ts-travis
-    - source ~/ts-travis/init.sh
-    - source ~/ts-travis/grails_inline.sh
-    - source ~/ts-travis/maven_dep.sh
-    - mkdir -p ~/.grails/transmartConfig
-    - cp .travis.BuildConfig.groovy ~/.grails/transmartConfig/BuildConfig.groovy
-
+- mkdir -p ~/.m2
+- bash -c '{ curl http://files.thehyve.net/caches/grails_2.3.5_mvncache.tar.gz  |
+  tar -C ~/.m2 -xzf -; } || true'
+- git clone --depth 1 git://github.com/thehyve/transmart-travis.git ~/ts-travis
+- source ~/ts-travis/init.sh
+- source ~/ts-travis/grails_inline.sh
+- source ~/ts-travis/maven_dep.sh
+- mkdir -p ~/.grails/transmartConfig
+- cp .travis.BuildConfig.groovy ~/.grails/transmartConfig/BuildConfig.groovy
 install:
-    - maybe_build_maven_dep $(travis_get_owner)/transmart-core-api core-api
-    - maybe_make_inline_grails_dep $(travis_get_owner)/transmart-core-db core-db . transmart-core-db-tests
-    - maybe_make_inline_grails_dep $(travis_get_owner)/Rmodules Rmodules
-    - maybe_make_inline_grails_dep $(travis_get_owner)/transmart-gwas-plugin transmart-gwas
-    - maybe_make_inline_grails_dep $(travis_get_owner)/folder-management-plugin folder-management
-    - maybe_make_inline_grails_dep $(travis_get_owner)/transmart-extensions transmart-extensions transmart-java search-domain biomart-domain
-    - maybe_make_inline_grails_dep $(travis_get_owner)/transmart-rest-api transmart-rest-api
-    - maybe_make_inline_grails_dep $(travis_get_owner)/blend4j-plugin blend4j-plugin
-    - maybe_make_inline_grails_dep $(travis_get_owner)/transmart-metacore-plugin transmart-metacore-plugin
-
+- maybe_build_maven_dep $(travis_get_owner)/transmart-core-api core-api
+- maybe_make_inline_grails_dep $(travis_get_owner)/transmart-core-db core-db . transmart-core-db-tests
+- maybe_make_inline_grails_dep $(travis_get_owner)/Rmodules Rmodules
+- maybe_make_inline_grails_dep $(travis_get_owner)/transmart-gwas-plugin transmart-gwas
+- maybe_make_inline_grails_dep $(travis_get_owner)/folder-management-plugin folder-management
+- maybe_make_inline_grails_dep $(travis_get_owner)/transmart-extensions transmart-extensions
+  transmart-java search-domain biomart-domain
+- maybe_make_inline_grails_dep $(travis_get_owner)/transmart-rest-api transmart-rest-api
+- maybe_make_inline_grails_dep $(travis_get_owner)/blend4j-plugin blend4j-plugin
+- maybe_make_inline_grails_dep $(travis_get_owner)/transmart-metacore-plugin transmart-metacore-plugin
 script:
-    - grails refresh-dependencies --non-interactive
-    - grails test-app --non-interactive --stacktrace
-    - grails war
-
-notifications:
-  hipchat:
-    rooms:
-      secure: "fdLLuPbpAjUDsuDRU4aFDnmvdPpw7VIrrBB7AOnSMSla4O3Mf4GAxhf35kuo8t2uBDHktqo8aETTkchZCzlDu1GyVREQJGkQv/SjBwa5PE9H262j6YMXW36rXWzkWruXMala6f1UQdQnU+8+ddbUNcyrgxxI6UzwBXDdIzDJa8k="
-    on_success: change
-    on_failure: always
+- grails refresh-dependencies --non-interactive
+- grails test-app --non-interactive --stacktrace
+- grails war
+deploy:
+  provider: releases
+  api_key:
+    secure: xEwc/k8EaivTOtezZg23ySYprz/E9Tnq7IVndPx7HYZFJ1f2ryprmq0JHExh1uf8d+yTM9siQ6sxRKmRPkq8WD1Bw9owxCP33uQDPLPETG6/kl5PODibs8eXWzvAJgxiAcIDVGJod0CbnY1eiSrt1Nbl5gsxhxIT8faS4Oqy4Nw=
+  file: target/transmart.war
+  on:
+    repo: spacemm/transmartApp
+    branch: release-1.2.4
