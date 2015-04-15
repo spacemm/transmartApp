@@ -32,5 +32,6 @@ deploy:
     secure: xEwc/k8EaivTOtezZg23ySYprz/E9Tnq7IVndPx7HYZFJ1f2ryprmq0JHExh1uf8d+yTM9siQ6sxRKmRPkq8WD1Bw9owxCP33uQDPLPETG6/kl5PODibs8eXWzvAJgxiAcIDVGJod0CbnY1eiSrt1Nbl5gsxhxIT8faS4Oqy4Nw=
   file: target/transmart.war
   on:
+    tags: true
     repo: spacemm/transmartApp
     branch: release-1.2.4
