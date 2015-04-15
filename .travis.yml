@@ -35,3 +35,4 @@ deploy:
   on:
     repo: spacemm/transmartApp
     branch: release-1.2.4
+    all_branches: true
